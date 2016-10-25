@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Word2Vec Playgorund</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Word2Vec Playground">
+  <meta name="author" content="Furkan Tektas - furkantektas.com">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <style type="text/css">
+    form {
+      vertical-align: middle;
+      text-align: center;
+    }
+    textarea{
+      resize:none;
+      overflow: overflow-y;
+    }
+  </style>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script type="text/javascript">
+    $(function() {
+      var submitFunction = function(form,success_callback) {
+        var url = form.attr('action');
+        $.ajax({
+               type: "GET",
+               url: url,
+               data: form.serialize(),
+               success: success_callback
+             });
+      }
+      var analogyForm = $("#analogyform");
+      analogyForm.submit(function(e) {
+          submitFunction(analogyForm, function(data) {
+                    $("#analogy_result").val(data.join('\n'));
+                 });
+          e.preventDefault();
+      });
+      var similarityForm = $("#similarityform");
+      similarityForm.submit(function(e) {
+          submitFunction(similarityForm, function(data) {
+                    $("#similarity_result").val(data);
+                 });
+          e.preventDefault(); // avoid to execute the actual submit of the form.
+      });
+      var mostSimilarForm = $("#mostsimilarform");
+      mostSimilarForm.submit(function(e) {
+          submitFunction(mostSimilarForm, function(data) {
+                    $("#most_similars_result").val(data.join('\n'));
+                 });
+          e.preventDefault(); // avoid to execute the actual submit of the form.
+      });
+    });
+  </script>
+</head>
+<body>
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">Word2Vec Playgorund</a>
+    </div>
+  </div>
+</nav>
+<div class="container">
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title">Analogy</h3>
+      </div>
+      <div class="panel-body">
+        <form class="form-inline" action="/analogy" id="analogyform" method="GET">
+          <div class="form-group">
+            <input type="name" name="pos_words[]" class="form-control" id="pos_words1" placeholder="woman">
+          </div>
+          <div class="form-group">
+            <label for="words2[]">+</label>
+            <input type="name" name="pos_words[]" class="form-control" id="pos_words2" placeholder="king">
+          </div>
+          <div class="form-group">
+            <label for="neg_word">-</label>
+            <input type="name" name="neg_word" class="form-control" id="neg_word" placeholder="man">
+          </div>
+          <div class="form-group">
+            <label for="analogy_result">→</label>
+            <textarea class="form-control" name="analogy_result" id="analogy_result" disabled rows="5" cols="40">queen</textarea>
+          </div>
+          <button type="submit" class="btn btn-success">Query</button>
+        </form>
+      </div>
+  </div>
+  <div class="panel panel-success">
+    <div class="panel-heading">
+        <h3 class="panel-title">Similarity Score</h3>
+      </div>
+      <div class="panel-body">
+        <form class="form-inline" action="/similarity" id="similarityform" method="GET">
+          <div class="form-group">
+            <input type="name" name="sim_words[]" class="form-control" id="sim_word1" placeholder="woman">
+          </div>
+          <div class="form-group">
+            <label for="sim_word2">↔</label>
+            <input type="name" name="sim_words[]" class="form-control" id="sim_word2" placeholder="man">
+          </div>
+          <div class="form-group">
+            <label for="similarity_result">→</label>
+            <input type="number" name="similarity_result" disabled class="form-control" id="similarity_result" placeholder="0.0">
+          </div>
+          <button type="submit" class="btn btn-success">Query</button>
+        </form>
+      </div>
+  </div>
+  <div class="panel panel-danger">
+    <div class="panel-heading">
+        <h3 class="panel-title">Most Similars</h3>
+      </div>
+      <div class="panel-body">
+        <form class="form-inline" action="/most_similar" id="mostsimilarform" method="GET">
+          <div class="form-group">
+            <input type="name" name="sim_word" class="form-control" id="sim_word" placeholder="woman">
+          </div>
+          <div class="form-group">
+            <label for="most_similars_result">→</label>
+            <textarea class="form-control" name="most_similars_result" id="most_similars_result" disabled rows="5" cols="40">man</textarea>
+          </div>
+          <button type="submit" class="btn btn-success">Query</button>
+        </form>
+      </div>
+  </div>
+</div>
+</body>
+</html>
